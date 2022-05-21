@@ -17,8 +17,9 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
   try {
     await client.connect();
-    const database = client.db("genius-car");
-    const serviceCollections = database.collection("service");
+    const serviceCollections = client.db("genius-car").collection("service");
+    const orderCollections = client.db("genius-car").collection("order");
+
     app.get('/service', async(req, res) => {
       // query for movies that have a runtime less than 15 minutes
       const query = {};
@@ -45,6 +46,22 @@ async function run() {
       const service = await serviceCollections.deleteOne(query);
       res.send(service);
     });
+
+    // get service Order 
+    app.post('/order', async(req, res) => {
+      const getOrder = req.body;
+      console.log(getOrder);
+      const order = await orderCollections.insertOne(getOrder);
+      res.send(order);
+    });
+    app.get('/order',async(req,res)=>{
+      const email = req.query.email;
+      console.log(email);
+      const query = {email:email};
+      const cursor = orderCollections.find(query);
+      const orders = await cursor.toArray();
+      res.send(orders)
+    })
   } finally {
     // await client.close();
   }
