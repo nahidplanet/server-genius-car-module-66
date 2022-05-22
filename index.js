@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 // user name : genius-car
 // password : pq7hRn7uQ9qBGjoz
-const uri = `mongodb+srv://genius-car:pq7hRn7uQ9qBGjoz@cluster0.qbxl7.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.qbxl7.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 async function run() {
   try {
